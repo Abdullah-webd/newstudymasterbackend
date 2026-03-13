@@ -5,7 +5,6 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: [true, 'Please add a username'],
-        unique: true,
         trim: true
     },
     email: {
@@ -59,7 +58,12 @@ const userSchema = new mongoose.Schema({
         bestSubject: String,
         weakSubject: String,
         schoolName: String,
-        age: Number
+        age: Number,
+        goal: String
+    },
+    onboardingCompleted: {
+        type: Boolean,
+        default: false
     },
     // Subscription fields
     subscription: {

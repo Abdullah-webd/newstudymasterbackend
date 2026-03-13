@@ -31,7 +31,8 @@ export const registerUser = async (req, res, next) => {
             subscriptionId,
             otp,
             otpExpires,
-            isEmailVerified: false
+            isEmailVerified: false,
+            onboardingCompleted: false
         });
 
         try {
@@ -112,6 +113,7 @@ export const registerWithGoogle = async (req, res, next) => {
                 userId,
                 subscriptionId,
                 isEmailVerified: true,
+                onboardingCompleted: false,
                 subscription: {
                     plan: '1-day-free-trial',
                     expirationDate: new Date(Date.now() + 24 * 60 * 60 * 1000)
@@ -238,10 +240,7 @@ export const verifyOTP = async (req, res, next) => {
         user.otpExpires = undefined;
         await user.save();
 
-        return res.status(200).json({
-            success: true,
-            message: 'Email verified successfully'
-        });
+        return sendTokenResponse(user, 200, res);
     } catch (err) {
         return res.status(500).json({ success: false, message: err.message });
     }
@@ -459,17 +458,18 @@ const sendTokenResponse = (user, statusCode, res) => {
         expiresIn: process.env.JWT_EXPIRE
     });
 
-    const userData = {
-        _id: user._id,
-        userId: user.userId,
-        username: user.username,
-        email: user.email,
-        subscriptionId: user.subscriptionId,
-        role: user.role,
-        isEmailVerified: user.isEmailVerified,
-        subscription: user.subscription,
-        onboarding: user.onboarding
-    };
+        const userData = {
+            _id: user._id,
+            userId: user.userId,
+            username: user.username,
+            email: user.email,
+            subscriptionId: user.subscriptionId,
+            role: user.role,
+            isEmailVerified: user.isEmailVerified,
+            onboardingCompleted: user.onboardingCompleted,
+            subscription: user.subscription,
+            onboarding: user.onboarding
+        };
 
     return res.status(statusCode).json({
         success: true,
