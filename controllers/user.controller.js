@@ -25,7 +25,7 @@ export const getCurrentUser = async (req, res) => {
 // @access  Private
 export const onboardingUser = async (req, res, next) => {
     try {
-        const { class: userClass, bestSubject, weakSubject, schoolName, age, goal } = req.body;
+        const { class: userClass, bestSubject, weakSubject, schoolName, age, goal, phoneNumber } = req.body;
 
         const updateData = {};
         if (userClass !== undefined) updateData['onboarding.class'] = userClass;
@@ -34,6 +34,10 @@ export const onboardingUser = async (req, res, next) => {
         if (schoolName !== undefined) updateData['onboarding.schoolName'] = schoolName;
         if (age !== undefined) updateData['onboarding.age'] = age;
         if (goal !== undefined) updateData['onboarding.goal'] = goal;
+        if (phoneNumber !== undefined) {
+            updateData['onboarding.phoneNumber'] = phoneNumber;
+            updateData.phoneNumber = phoneNumber;
+        }
 
         const completed = Boolean(
             String(userClass || '').trim() &&

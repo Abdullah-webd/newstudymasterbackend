@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema({
             'Please add a valid email'
         ]
     },
+    phoneNumber: {
+        type: String,
+        default: ''
+    },
     password: {
         type: String,
         required: function () { return !this.googleId; }, // Only required if not Google login
@@ -59,7 +63,8 @@ const userSchema = new mongoose.Schema({
         weakSubject: String,
         schoolName: String,
         age: Number,
-        goal: String
+        goal: String,
+        phoneNumber: String
     },
     onboardingCompleted: {
         type: Boolean,

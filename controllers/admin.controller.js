@@ -75,7 +75,7 @@ export const getAdminDashboard = async (req, res) => {
     try {
         const users = await User.find()
             .sort({ createdAt: -1 })
-            .select('username email userId subscription createdAt studyStats.lastActivity');
+            .select('username email userId phoneNumber onboarding.phoneNumber subscription createdAt studyStats.lastActivity');
 
         const totalUsers = users.length;
         const activeSubscriptions = users.filter((u) => isSubscriptionActive(u.subscription)).length;
@@ -164,7 +164,7 @@ export const getAllUsers = async (req, res) => {
                 .sort({ createdAt: -1 })
                 .skip((parsedPage - 1) * parsedLimit)
                 .limit(parsedLimit)
-                .select('username email userId subscription createdAt studyStats.lastActivity'),
+                .select('username email userId phoneNumber onboarding.phoneNumber subscription createdAt studyStats.lastActivity'),
             User.countDocuments(query),
         ]);
 

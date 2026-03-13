@@ -463,6 +463,7 @@ const sendTokenResponse = (user, statusCode, res) => {
             userId: user.userId,
             username: user.username,
             email: user.email,
+            phoneNumber: user.phoneNumber,
             subscriptionId: user.subscriptionId,
             role: user.role,
             isEmailVerified: user.isEmailVerified,
