@@ -24,6 +24,7 @@ import community from './routes/community.routes.js';
 import follow from './routes/follow.routes.js';
 import profile from './routes/profile.routes.js';
 import settings from './routes/settings.routes.js';
+import game from './routes/game.routes.js';
 
 
 import { inngestServe } from './inngest/handler.js';
@@ -99,6 +100,7 @@ app.use('/api/v1/community', community);
 app.use('/api/v1/follow', follow);
 app.use('/api/v1/profile', profile);
 app.use('/api/v1/settings', settings);
+app.use('/api/v1/game', game);
 
 
 app.use('/api/inngest', inngestServe);
