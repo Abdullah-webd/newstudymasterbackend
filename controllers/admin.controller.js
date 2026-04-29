@@ -75,7 +75,7 @@ export const getAdminDashboard = async (req, res) => {
     try {
         const users = await User.find()
             .sort({ createdAt: -1 })
-            .select('username email userId phoneNumber onboarding.phoneNumber subscription createdAt studyStats.lastActivity');
+            .select('username email userId phoneNumber onboarding.phoneNumber subscription createdAt studyStats.lastActivity contactedByAdmin');
 
         const totalUsers = users.length;
         const activeSubscriptions = users.filter((u) => isSubscriptionActive(u.subscription)).length;
@@ -164,7 +164,7 @@ export const getAllUsers = async (req, res) => {
                 .sort({ createdAt: -1 })
                 .skip((parsedPage - 1) * parsedLimit)
                 .limit(parsedLimit)
-                .select('username email userId phoneNumber onboarding.phoneNumber subscription createdAt studyStats.lastActivity'),
+                .select('username email userId phoneNumber onboarding.phoneNumber subscription createdAt studyStats.lastActivity contactedByAdmin'),
             User.countDocuments(query),
         ]);
 
@@ -262,3 +262,36 @@ export const updateUserSubscriptionByAdmin = async (req, res) => {
         return res.status(500).json({ success: false, message: error.message });
     }
 };
+
+// @desc    Mark/unmark user as contacted by admin
+// @route   PATCH /api/v1/admin/users/:userId/contacted
+// @access  Private/AdminPanel
+export const markUserContacted = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { contacted } = req.body;
+
+        if (typeof contacted !== 'boolean') {
+            return res.status(400).json({ success: false, message: '`contacted` must be a boolean' });
+        }
+
+        const user = await User.findOneAndUpdate(
+            { userId },
+            { $set: { contactedByAdmin: contacted } },
+            { new: true, select: 'userId username email contactedByAdmin' }
+        );
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: `User not found with userId ${userId}` });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: contacted ? 'User marked as contacted' : 'User marked as not contacted',
+            data: user,
+        });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
+

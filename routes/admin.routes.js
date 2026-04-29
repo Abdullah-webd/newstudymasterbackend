@@ -4,7 +4,8 @@ import {
     getAdminDashboard,
     getAllUsers,
     extendUserSubscriptionByAdmin,
-    updateUserSubscriptionByAdmin
+    updateUserSubscriptionByAdmin,
+    markUserContacted
 } from '../controllers/admin.controller.js';
 import jwt from 'jsonwebtoken';
 
@@ -82,6 +83,35 @@ router.post('/subscription/extend', extendUserSubscriptionByAdmin);
  *                 type: string
  *                 format: date-time
  *               metadata:
+
+/**
+ * @swagger
+ * /api/v1/admin/users/{userId}/subscription:
+ *   put:
+ *     summary: Update a user's subscription by admin
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The unique user ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               plan:
+ *                 type: string
+ *               expirationDate:
+ *                 type: string
+ *                 format: date-time
+ *               metadata:
  *                 type: object
  *     responses:
  *       200:
@@ -90,5 +120,6 @@ router.post('/subscription/extend', extendUserSubscriptionByAdmin);
  *         description: User not found
  */
 router.put('/users/:userId/subscription', updateUserSubscriptionByAdmin);
+router.patch('/users/:userId/contacted', markUserContacted);
 
 export default router;

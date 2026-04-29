@@ -70,6 +70,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    contactedByAdmin: {
+        type: Boolean,
+        default: false
+    },
     // Subscription fields
     subscription: {
         plan: {
